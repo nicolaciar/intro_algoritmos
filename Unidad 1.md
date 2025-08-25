@@ -84,3 +84,206 @@ Cuando simplificamos, buscamos llegar a una **forma canónica**, es decir, la ve
 3. Repetir hasta que ya no quede nada por simplificar.
 
  En expresiones con variables, el proceso se detiene en cuanto no se puede aplicar más aritmética numérica.
+
+### Extensión: fórmulas
+
+Cuando aparecen **fórmulas** (expresiones con relaciones como `=`, `<`, `>`), la simplificación implica reducir **cada lado**.
+
+Ejemplo: 
+$$2+3 = 5 \quad \equiv \quad 5=5 \quad \equiv \quad True$$
+
+Aquí aparece el símbolo de **equivalencia lógica (≡)**, que compara **valores de verdad** en lugar de valores numéricos.
+
+Además se introducen **True** y **False** como nuevas constantes.
+
+## 3. El problema del tipado
+
+Hasta aquí:
+
+- Tenemos **expresiones numéricas** → siempre dan un número como forma canónica.
+
+- Tenemos **fórmulas con relaciones** → siempre dan un valor booleano (`True` o `False`).
+
+Pero cuando introdujimos `True` y `False` como **constantes booleanas**, aparecen **expresiones sin sentido**.  
+ Ejemplo:
+
+$$True + 3$$
+
+No representa ni un número ni un valor de verdad → **no tiene forma canónica**.
+
+Esto muestra que no todas las expresiones que son _sintácticamente correctas_ tienen _semántica válida_.
+
+### Solución: los tipos
+
+Para distinguir qué expresiones tienen sentido, se introducen los **tipos**.
+
+- `Nat` $→$ conjunto de todos los números naturales.
+
+- `Bool` $→$ conjunto formado por `True` y `False`.
+
+
+**Definición**:  
+Cada expresión debe estar asociada a un **tipo**. El tipo nos dice en qué “conjunto” vive el valor que la expresión representa.
+
+Ejemplo:
+
+1. `4 + 3` → `Nat`.
+
+2. `True + 3` → **mal tipada** (no tiene tipo).
+
+3. `x + 3` → depende del tipo de `x`; si `x : Nat`, entonces la expresión tiene tipo `Nat`.
+
+
+### Árboles de tipado
+
+Para justificar el tipo de una expresión se construye un **árbol de tipado**, donde:
+
+- Las hojas son constantes o variables con su tipo.
+
+- Los nodos son operadores que combinan tipos según reglas.
+
+
+Ejemplo (del texto):
+
+$$2−4∗52 - 4 * 5$$
+
+Árbol:
+
+```
+       (-)
+     /     \
+   2       (*)
+          /   \
+         4     5
+```
+
+Cada operación está justificada por una “regla de tipado”, por ejemplo:
+
+- Si `a : Nat` y `b : Nat`, entonces `a+b : Nat`.
+
+- Si `a : Nat` y `b : Nat`, entonces `a = b : Bool`.
+
+
+### Importancia del tipado
+
+- Evita perder tiempo intentando simplificar expresiones sin sentido.
+
+- Permite **predecir errores antes de calcular** (clave en programación).
+
+- Garantiza que el programa o fórmula esté **bien definida**.
+
+
+ De hecho, los lenguajes de programación modernos (Haskell, Java, Python, etc.) incorporan sistemas de tipos justamente para evitar errores de este estilo.
+
+
+
+## 4. Validez y Satisfactibilidad
+
+
+Hasta ahora vimos:
+
+- **Expresiones con números** → se simplifican a un número.
+
+- **Fórmulas con relaciones** → se simplifican a un valor de verdad (`True` o `False`).
+
+
+Pero cuando aparecen **variables**, las fórmulas pueden depender de sus valores.  
+Ejemplo:
+
+$$x+x=2x$$
+
+¿Es siempre verdadera? ¿Solo para algunos valores de $x$? ¿Nunca?
+
+Aquí entran los conceptos de **validez** y **satisfactibilidad**.
+
+
+### Validez
+
+>**Definición**:  
+>Una fórmula es **válida** si es **verdadera para todos los valores de sus variables**.
+
+Ejemplo:
+$$(x-1)(x+1) = x^2 - 1$$
+  Es válida: da `True` para cualquier $x$.
+
+
+Una fórmula *no válida* es aquella que **falla al menos en un caso**.
+
+Ejemplo:
+$$x = x+1$$
+Nunca es verdadera $→$ **no válida**.
+
+
+---
+
+### Satisfactibilidad
+
+>**Definición**:  
+>Una fórmula es **satisfactible** si existe **al menos un valor de las variables** que la hace verdadera.
+
+Ejemplo:
+$$3x - 16 = x$$
+
+se simplifica a $2x = 16$, o sea $x=8$.  $→$ Es satisfactible, porque tiene solución.
+
+Una fórmula es **no satisfactible** si **no existe ningún valor** que la haga verdadera.
+
+Ejemplo:
+
+$$x = x+1$$
+No tiene solución $→$ no satisfactible.
+
+
+### Relación entre validez y satisfactibilidad
+
+
+![[Pasted image 20250825200551.png]]
+
+
+* Si una fórmula es **válida**, entonces también es **satisfactible** (porque es verdadera para todos los valores, en particular para alguno).
+
+- Si es **no satisfactible**, necesariamente es **no válida**.
+
+
+👉 Diagrama de inclusión (esquema mental):
+
+```
+Válidas ⊂ Satisfactibles
+No válidas → pueden ser satisfactibles o no
+```
+
+
+### Ejemplos importantes
+
+1. **Válida**: $$a^2 - b^2 = (a+b)(a-b)$$(siempre cierta).
+
+2. **Satisfactible pero no válida**:
+$$x^2 + 2x - 3 = 0$$
+
+   (cierta solo para algunos valores de $x$).
+
+3. **No satisfactible (y no válida)**:
+$$x = x+1$$
+   (nunca cierta).
+
+
+### Importancia
+
+- En matemáticas:  
+    → Los **teoremas** son fórmulas válidas.  
+    → Las **ecuaciones** que resolvemos suelen ser satisfactibles (no necesariamente válidas).
+    
+- En programación y lógica:  
+    → Comprobar que una condición es válida asegura que un programa siempre cumple cierta propiedad.
+
+
+### **En resumen**:
+
+- **Validez** → verdad universal.
+
+- **Satisfactibilidad** → verdad “a veces”.
+
+- **No validez** → falla en al menos un caso.
+
+- **No satisfactibilidad** → no hay ningún caso en que funcione.
+
