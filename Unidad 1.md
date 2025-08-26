@@ -44,7 +44,12 @@ Las **reglas de precedencia** fijan un orden jerárquico de evaluación de opera
 1. **Raíces y potencias** $(\sqrt{\phantom{x}}, (\cdot)^2)$
 2. **Producto y división** $(∗,/)$
 3. **Suma y resta** $(+, -)$
-4. **Relaciones** $(=,≠,<,≤,>,≥)$
+4. **Máximo y mínimo** $(\max , \min)$
+5. **Relaciones** $(=,≠,<,≤,>,≥)$
+6. **Negación** $(¬)$
+7. **Disyunción y conjunción $(∨∧)$
+8. **Implicación y consecuencia** $(⇒⇐)$
+9. **Equivalencia y discrepancia** $(≡ ≢)$
 
 Los paréntesis `()` permiten **alterar** el orden natural de evaluación.
 
